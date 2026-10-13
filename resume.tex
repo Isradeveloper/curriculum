@@ -7,6 +7,12 @@
 
 \documentclass[letterpaper,11pt]{article}
 
+% Language: en (default) or es.
+% Compile Spanish without editing this file:
+%   pdflatex -jobname=resume-es "\def\ResumeLang{es}\input{resume.tex}"
+\providecommand{\ResumeLang}{en}
+
+\usepackage[T1]{fontenc}
 \usepackage{fontawesome5}
 \usepackage{latexsym}
 \usepackage[empty]{fullpage}
@@ -17,11 +23,23 @@
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
-\usepackage[english]{babel}
+\usepackage[spanish,es-noshorthands,english]{babel}
 \usepackage{tabularx}
 \input{glyphtounicode}
 
+\AtBeginDocument{%
+  \ifnum\pdfstrcmp{\ResumeLang}{es}=0
+    \selectlanguage{spanish}%
+    \spanishplainpercent
+  \else
+    \selectlanguage{english}%
+  \fi
+}
 
+% \tr{English}{Español}
+\DeclareRobustCommand{\tr}[2]{%
+  \ifnum\pdfstrcmp{\ResumeLang}{es}=0 #2\else #1\fi
+}
 
 % Custom font
 \usepackage[default]{lato}

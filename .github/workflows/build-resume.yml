@@ -1,0 +1,43 @@
+name: Build resume PDFs
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - resume.pdf
+      - resume-es.pdf
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile English and Spanish resumes
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            resume.tex
+            resume-es.tex
+          pre_compile: |
+            printf '%s\n' '\def\ResumeLang{es}' '\input{resume.tex}' > resume-es.tex
+          post_compile: |
+            rm -f resume-es.tex
+
+      - name: Commit PDFs
+        run: |
+          git config user.name "Israel Trujillo Domínguez"
+          git config user.email "ingisraeltrujillo@gmail.com"
+          git add -- resume.pdf resume-es.pdf
+          if git diff --cached --quiet; then
+            echo "PDFs are already up to date."
+            exit 0
+          fi
+          git commit -m "Update generated resume PDFs [skip ci]"
+          git pull --rebase origin main
+          git push
