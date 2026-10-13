@@ -7,8 +7,8 @@ on:
     branches:
       - main
     paths-ignore:
-      - resume.pdf
-      - resume-es.pdf
+      - "Curriculum Israel Trujillo Dominguez - Software Engineer.pdf"
+      - "Curriculum Israel Trujillo Dominguez - Ingeniero de software.pdf"
 
 permissions:
   contents: write
@@ -29,13 +29,15 @@ jobs:
           pre_compile: |
             printf '%s\n' '\def\ResumeLang{es}' '\input{resume.tex}' > resume-es.tex
           post_compile: |
+            mv -f resume.pdf "Curriculum Israel Trujillo Dominguez - Software Engineer.pdf"
+            mv -f resume-es.pdf "Curriculum Israel Trujillo Dominguez - Ingeniero de software.pdf"
             rm -f resume-es.tex
 
       - name: Commit PDFs
         run: |
           git config user.name "Israel Trujillo Domínguez"
           git config user.email "ingisraeltrujillo@gmail.com"
-          git add -- resume.pdf resume-es.pdf
+          git add -f -- "Curriculum Israel Trujillo Dominguez - Software Engineer.pdf" "Curriculum Israel Trujillo Dominguez - Ingeniero de software.pdf"
           if git diff --cached --quiet; then
             echo "PDFs are already up to date."
             exit 0
