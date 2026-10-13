@@ -1,0 +1,3 @@
+*.aux
+resume*
+!resume.tex
