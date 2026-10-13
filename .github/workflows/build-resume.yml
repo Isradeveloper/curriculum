@@ -1,6 +1,8 @@
 name: Build resume PDFs
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - main
